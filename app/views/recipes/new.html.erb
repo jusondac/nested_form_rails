@@ -1,0 +1,37 @@
+
+<div class="max-w-3xl mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-6">New Recipe</h1>
+  <%= form_with model: @recipe, class: "space-y-6" do |form| %>
+    <div>
+      <%= form.label :title, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :title, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :instructions, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_area :instructions, rows: 4, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <h2 class="text-lg font-medium text-gray-900 mb-2">Ingredients</h2>
+      <div id="ingredients" 
+           data-controller="nested-form" 
+           data-nested-form-wrapper-class="nested-fields">
+        <template data-nested-form-target="template">
+          <%= form.fields_for :ingredients, Ingredient.new, child_index: "NEW_RECORD" do |ingredient_form| %>
+            <%= render "ingredient_fields", form: ingredient_form %>
+          <% end %>
+        </template>
+        <%= form.fields_for :ingredients do |ingredient_form| %>
+          <%= render "ingredient_fields", form: ingredient_form %>
+        <% end %>
+        <div data-nested-form-target="links" class="mt-4">
+          <%= link_to "Add Ingredient", "#", 
+                      data: { action: "nested-form#add" }, 
+                      class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        </div>
+      </div>
+    </div>
+    <div class="pt-4">
+      <%= form.submit "Save Recipe", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+    </div>
+  <% end %>
+</div>
